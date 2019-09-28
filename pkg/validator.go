@@ -159,6 +159,7 @@ func convertInternalTypes(context *phaseContext) bool {
 				if char == ';' {
 					context.mime = val[start:i]
 					start = i + 8
+					break
 				}
 			}
 		}
@@ -168,7 +169,10 @@ func convertInternalTypes(context *phaseContext) bool {
 			context.err = translate("type.image", translateAttribute(context.name))
 			return false
 		}
-		context.value = data
+		context.value = &File{
+			MimeType: context.mime,
+			Buffer:   data,
+		}
 		break
 	case "file":
 		if reflect.TypeOf(context.value).Kind() != reflect.String {
@@ -176,13 +180,28 @@ func convertInternalTypes(context *phaseContext) bool {
 			context.err = translate("type.file", translateAttribute(context.name))
 			return false
 		}
-		data, err := base64.StdEncoding.DecodeString(context.value.(string))
+		val := context.value.(string)
+		start := 0
+		if val[0:5] == "data:" {
+			start = 5
+			for i, char := range val {
+				if char == ';' {
+					context.mime = val[start:i]
+					start = i + 8
+					break
+				}
+			}
+		}
+		data, err := base64.StdEncoding.DecodeString(val[start:])
 		if err != nil {
 			context.hasError = true
 			context.err = translate("type.file", translateAttribute(context.name))
 			return false
 		}
-		context.value = data
+		context.value = &File{
+			MimeType: context.mime,
+			Buffer:   data,
+		}
 		break
 	case "bool":
 		if reflect.TypeOf(context.value).Kind() != reflect.Bool {
@@ -195,7 +214,7 @@ func convertInternalTypes(context *phaseContext) bool {
 	return true
 }
 
-func Validate(body string, rules []string) (map[string]interface{}, error) {
+func ValidateJson(body string, rules []string) (map[string]interface{}, error) {
 	var data map[string]interface{}
 	err := json.Unmarshal([]byte(body), &data)
 	if err != nil {
@@ -207,7 +226,10 @@ func Validate(body string, rules []string) (map[string]interface{}, error) {
 	}else {
 		return value, errors.New("validation failed")
 	}
+}
 
+func Validate(body map[string]interface{}, rules []string) (map[string]interface{}, bool) {
+	return validate(body, rules)
 }
 func validate(obj subjectObj, rules []string) (map[string]interface{}, bool) {
 	var values = make(map[string]interface{})

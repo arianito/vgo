@@ -4,6 +4,11 @@ import (
 	"strings"
 )
 
+type File struct {
+	MimeType string
+	Buffer []byte
+}
+
 func checkEmptiness(obj interface{}, nullable bool) bool {
 	switch obj.(type) {
 	case nil:

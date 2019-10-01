@@ -89,6 +89,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"integer": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil {
+				context.value = int64(0)
+			}
 			i := reflect.Indirect(reflect.ValueOf(context.value))
 			context.value = i.Convert(reflect.TypeOf(0)).Int()
 			return nil

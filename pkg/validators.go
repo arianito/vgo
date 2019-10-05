@@ -61,6 +61,19 @@ var validators = map[string]interface{}{
 		},
 	},
 	"number": map[string]validatorFunc{
+		"in": func(context *phaseContext, obj subjectObj) error {
+			i := reflect.Indirect(reflect.ValueOf(context.value))
+			y := i.Convert(reflect.TypeOf(float64(0))).Float()
+			for _, item := range context.args {
+				x, _ := strconv.ParseFloat(item, 64)
+				if x == y {
+					return nil
+				}
+			}
+			context.hasError = true
+			context.err = translate("number.in", translateAttribute(context.name))
+			return nil
+		},
 		"digits": func(context *phaseContext, obj subjectObj) error {
 			a, _ := strconv.Atoi(context.args[0])
 			v := (int64)(math.Floor(context.value.(float64)))
@@ -149,6 +162,14 @@ var validators = map[string]interface{}{
 		},
 	},
 	"string": map[string]validatorFunc{
+		"national": func(context *phaseContext, obj subjectObj) error {
+			str := context.value.(string)
+			if !isValidIranianNationalCode(str) {
+				context.hasError = true
+				context.err = translate("string.nationalCode", translateAttribute(context.name))
+			}
+			return nil
+		},
 		"filled": func(context *phaseContext, obj subjectObj) error {
 			str := context.value.(string)
 			if len(str) < 1 {

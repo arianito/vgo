@@ -24,6 +24,7 @@ var translations = map[string]string{
 	"different":          "%s و %s باید از یکدیگر متفاوت باشند.",
 
 
+	"string.national":     "فیلد %s باید یک کد ملی معتبر باشد.",
 	"string.filled":     "فیلد %s باید مقدار داشته باشد.",
 	"string.in":         "%s انتخاب شده، معتبر نیست.",
 	"string.inArray":    "فیلد %s در لیست %s وجود ندارد.",
@@ -58,6 +59,7 @@ var translations = map[string]string{
 	"number.lessThan": "%s باید کوچکتر از %v باشد.",
 	"number.lessThanOrEqual": "%s باید کوچکتر یا مساوی %v باشد.",
 	"number.between": "%s باید بین %v و %v باشد.",
+	"number.in":         "%s انتخاب شده، معتبر نیست.",
 
 	"date.after": "%s(%v) باید تاریخی بعد از %v باشد.",
 	"date.before": "%s(%v) باید تاریخی قبل از %v باشد.",

@@ -253,7 +253,7 @@ func validate(obj subjectObj, rules []string) (map[string]interface{}, bool) {
 				return true
 			}
 			context.rule = name
-			fn, ok := SharedOperators[context.rule]
+			fn, ok := sharedOperators[context.rule]
 			if ok {
 				_ = fn(context, obj)
 				if context.hasError {

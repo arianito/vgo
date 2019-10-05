@@ -26,7 +26,7 @@ func checkEmptiness(obj interface{}, nullable bool) bool {
 	return false
 }
 
-var SharedOperators = map[string]validatorFunc{
+var sharedOperators = map[string]validatorFunc{
 	"nullable": func(context *phaseContext, obj subjectObj) error {
 		context.nullable = true
 		return nil

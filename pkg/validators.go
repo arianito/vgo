@@ -32,6 +32,9 @@ func contains(val string, args []string) bool {
 var validators = map[string]interface{}{
 	"date": map[string]validatorFunc{
 		"after": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := parseDate(context.args[0])
 			v := context.value.(time.Time)
 			if !v.After(a) {
@@ -41,6 +44,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"before": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := parseDate(context.args[0])
 			v := context.value.(time.Time)
 			if !v.Before(a) {
@@ -50,6 +56,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"between": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := parseDate(context.args[0])
 			b, _ := parseDate(context.args[1])
 			v := context.value.(time.Time)
@@ -62,6 +71,9 @@ var validators = map[string]interface{}{
 	},
 	"number": map[string]validatorFunc{
 		"in": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			i := reflect.Indirect(reflect.ValueOf(context.value))
 			y := i.Convert(reflect.TypeOf(float64(0))).Float()
 			for _, item := range context.args {
@@ -75,6 +87,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"digits": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.Atoi(context.args[0])
 			v := (int64)(math.Floor(context.value.(float64)))
 			k:=1
@@ -88,6 +103,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"digitsBetween": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.Atoi(context.args[0])
 			b, _ := strconv.Atoi(context.args[1])
 			v := (int64)(math.Floor(context.value.(float64)))
@@ -102,6 +120,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"integer": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			if context.value == nil {
 				context.value = int64(0)
 			}
@@ -110,6 +131,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"greaterThan": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.ParseFloat(context.args[0], 64)
 			i := reflect.Indirect(reflect.ValueOf(context.value))
 			val := i.Convert(reflect.TypeOf(float64(0))).Float()
@@ -120,6 +144,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"greaterThanOrEqual": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.ParseFloat(context.args[0], 64)
 			i := reflect.Indirect(reflect.ValueOf(context.value))
 			val := i.Convert(reflect.TypeOf(float64(0))).Float()
@@ -130,6 +157,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"lessThan": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.ParseFloat(context.args[0], 64)
 			i := reflect.Indirect(reflect.ValueOf(context.value))
 			val := i.Convert(reflect.TypeOf(float64(0))).Float()
@@ -140,6 +170,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"lessThanOrEqual": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.ParseFloat(context.args[0], 64)
 			i := reflect.Indirect(reflect.ValueOf(context.value))
 			val := i.Convert(reflect.TypeOf(float64(0))).Float()
@@ -150,6 +183,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"between": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.ParseFloat(context.args[0], 64)
 			b, _ := strconv.ParseFloat(context.args[1], 64)
 			i := reflect.Indirect(reflect.ValueOf(context.value))
@@ -163,6 +199,9 @@ var validators = map[string]interface{}{
 	},
 	"string": map[string]validatorFunc{
 		"national": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			str := context.value.(string)
 			if !isValidIranianNationalCode(str) {
 				context.hasError = true
@@ -171,6 +210,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"filled": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			str := context.value.(string)
 			if len(str) < 1 {
 				context.hasError = true
@@ -179,6 +221,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"json": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			str := context.value.(string)
 			var data map[string]interface{}
 			err := json.Unmarshal([]byte(str), &data)
@@ -189,6 +234,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"url": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			_, err := url.ParseRequestURI(context.value.(string))
 			if err != nil {
 				context.hasError = true
@@ -197,6 +245,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"uuid": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			_, err := uuid.Parse(context.value.(string))
 			if err != nil {
 				context.hasError = true
@@ -205,6 +256,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"ip": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			test := net.ParseIP(context.value.(string))
 			if test.To4() == nil || test.To16() == nil {
 				context.hasError = true
@@ -213,6 +267,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"ipv4": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			test := net.ParseIP(context.value.(string))
 			if test.To4() == nil {
 				context.hasError = true
@@ -221,6 +278,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"ipv6": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			test := net.ParseIP(context.value.(string))
 			if test.To16() == nil {
 				context.hasError = true
@@ -229,6 +289,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"email": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			if !emailValidator.MatchString(context.value.(string)) {
 				context.hasError = true
 				context.err = translate("string.email", translateAttribute(context.name))
@@ -236,6 +299,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"mobile": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			if !regexp.MustCompile("^[0][9][0-9]{9}$").MatchString(context.value.(string)) {
 				context.hasError = true
 				context.err = translate("string.mobile", translateAttribute(context.name))
@@ -243,6 +309,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"phone": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			if !regexp.MustCompile("^[0][1-8][0-9]{9}$").MatchString(context.value.(string)) {
 				context.hasError = true
 				context.err = translate("string.phone", translateAttribute(context.name))
@@ -250,6 +319,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"in": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			for _, item := range context.args {
 				if item == context.value {
 					return nil
@@ -260,6 +332,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"inArray": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			val, ok := obj[context.args[0]]
 			if ok && reflect.TypeOf(val).Kind() == reflect.Slice {
 				for _, item := range val.([]interface{}) {
@@ -273,6 +348,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"notIn": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			for _, item := range context.args {
 				if item == context.value {
 					context.hasError = true
@@ -283,6 +361,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"size": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			val, _ := strconv.Atoi(context.args[0])
 			str, ok :=context.value.(string)
 			if ok && len(str) != val {
@@ -293,6 +374,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"min": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.Atoi(context.args[0])
 			c := len(context.value.(string))
 			if c < a {
@@ -303,6 +387,12 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"max": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
+			if context.value == nil{
+				return nil
+			}
 			b, _ := strconv.Atoi(context.args[0])
 			c := len(context.value.(string))
 			if c > b {
@@ -313,6 +403,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"between": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			a, _ := strconv.Atoi(context.args[0])
 			b, _ := strconv.Atoi(context.args[1])
 			c := len(context.value.(string))
@@ -324,6 +417,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"username": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			if !regexUsername.MatchString(context.value.(string)) {
 				context.hasError = true
 				context.err = translate("string.username", translateAttribute(context.name))
@@ -332,6 +428,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"alphaNum": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			if !alphaNumeric.MatchString(context.value.(string)) {
 				context.hasError = true
 				context.err = translate("string.alphaNum", translateAttribute(context.name))
@@ -340,6 +439,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"alpha": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 
 			hasFa := contains("fa", context.args)
 			hasEn := contains("en", context.args)
@@ -365,6 +467,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"regex": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			re := regexp.MustCompile(context.args[0]).MatchString(context.value.(string))
 			if !re {
 				context.hasError = true
@@ -374,6 +479,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"notRegex": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			re := regexp.MustCompile(context.args[0]).MatchString(context.value.(string))
 			if re {
 				context.hasError = true
@@ -383,6 +491,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"contains": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			val := context.value.(string)
 			for _, arg := range context.args {
 				if strings.Index(val, arg) > -1 {
@@ -394,6 +505,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"startsWith": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			val := context.value.(string)
 			for _, arg := range context.args {
 				if strings.Index(val, arg) == 0 {
@@ -405,6 +519,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"endsWith": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			val := context.value.(string)
 			nv := len(val)
 			for _, arg := range context.args {
@@ -417,6 +534,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"same": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			arg := context.args[0]
 			a, aOk := obj[context.name]
 			b, bOk := obj[arg]
@@ -431,6 +551,9 @@ var validators = map[string]interface{}{
 			return nil
 		},
 		"different": func(context *phaseContext, obj subjectObj) error {
+			if context.value == nil{
+				return nil
+			}
 			arg := context.args[0]
 			a, aOk := obj[context.name]
 			b, bOk := obj[arg]
